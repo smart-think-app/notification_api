@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { DevicesService } from './devices.service';
 import { DevicesController } from './devices.controller';
-import { DeviceRepositoryModule } from 'src/repository/device-repository/device-repository.module';
+import { MongoRepositoryModule } from 'src/repository/mongo-repository/mongo-repository.module';
 
 @Module({
-  imports: [DeviceRepositoryModule],
+  imports: [MongoRepositoryModule],
   controllers: [DevicesController],
   providers: [DevicesService],
 })
