@@ -9,10 +9,16 @@ export class NotificationEntity {
   sender_account_id: string;
 
   @Prop({ required: true })
-  receiver_account_ids: string[];
+  receiver_account_id: string;
 
   @Prop({ type: mongoose.Schema.Types.Mixed })
   content_data: any;
+
+  @Prop()
+  status: number;
+
+  @Prop({ required: true })
+  uuid: string;
 }
 
 export const NotificationSchema =

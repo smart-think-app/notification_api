@@ -22,4 +22,15 @@ export class NotificationRepository {
     }
     return true;
   }
+
+  async insertListNotification(
+    entities: NotificationEntity[],
+  ): Promise<boolean> {
+    try {
+      await this.notificationModel.insertMany(entities);
+      return Promise.resolve<boolean>(true);
+    } catch (error) {
+      return Promise.reject<boolean>(error);
+    }
+  }
 }

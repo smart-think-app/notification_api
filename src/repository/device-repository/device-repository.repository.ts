@@ -25,4 +25,16 @@ export class DeviceRepository {
     }
     return true;
   }
+
+  async getDevicesByAccountId(accountId: string): Promise<DeviceEntity[]> {
+    const result = await this.deviceModel
+      .find(
+        {
+          account_id: accountId,
+        },
+        { fcm_token: true },
+      )
+      .exec();
+    return Promise.resolve<DeviceEntity[]>(result);
+  }
 }
