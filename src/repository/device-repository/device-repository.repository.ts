@@ -9,7 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class DeviceRepository {
   constructor(
-    @InjectModel('device') private deviceModel: Model<DeviceDocument>,
+    @InjectModel('devices') private deviceModel: Model<DeviceDocument>,
   ) {}
 
   async insertOneDevice(entity: DeviceEntity): Promise<boolean> {

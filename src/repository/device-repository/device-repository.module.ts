@@ -5,7 +5,7 @@ import { DeviceRepository } from './device-repository.repository';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: 'device', schema: DeviceSchema }]),
+    MongooseModule.forFeature([{ name: 'devices', schema: DeviceSchema }]),
   ],
   providers: [DeviceRepository],
   exports: [DeviceRepository],
