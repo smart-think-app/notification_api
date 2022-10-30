@@ -7,11 +7,14 @@ import { NotificationEntity } from './entities/notification.entity';
 import { NotificationStatusEnum } from 'src/enums/notification-status.enum';
 import { DeviceRepository } from 'src/repository/device-repository/device-repository.repository';
 import { v4 as uuidv4 } from 'uuid';
+import { FirebaseService } from 'src/proxy/firebase/firebase.service';
+import { SendNotificationRequestDto } from 'src/proxy/firebase/dto/firebase-dto.dto';
 @Injectable()
 export class NotificationsService {
   constructor(
     private _notificationRepository: NotificationRepository,
     private _deviceRepository: DeviceRepository,
+    private _firebaseService: FirebaseService,
   ) {}
   async create(request: CreateNotificationDto): Promise<ApiResponse> {
     try {
@@ -36,6 +39,23 @@ export class NotificationsService {
         request.receiver_account_ids.forEach(async (x) => {
           const devices = await this._deviceRepository.getDevicesByAccountId(x);
           console.log(devices);
+          const requestSendFirebase: SendNotificationRequestDto = {
+            registration_ids: devices.map((x) => {
+              return x.fcm_token;
+            }),
+            data: request.content,
+            notification: {
+              title: 'title notification',
+              body: 'body notification',
+            },
+          };
+          try {
+            const responseFirebase =
+              await this._firebaseService.sendNotification(requestSendFirebase);
+            console.log(responseFirebase);
+          } catch (error) {
+            console.log('error firebase');
+          }
         });
 
         return Promise.resolve<ApiResponse>({
