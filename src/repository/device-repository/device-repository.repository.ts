@@ -37,4 +37,40 @@ export class DeviceRepository {
       .exec();
     return Promise.resolve<DeviceEntity[]>(result);
   }
+
+  async findOneDeviceByDeviceId(
+    accountId: string,
+    deviceId: string,
+  ): Promise<DeviceEntity> {
+    const result = await this.deviceModel
+      .findOne(
+        {
+          account_id: accountId,
+          device_id: deviceId,
+        },
+        {
+          account_id: true,
+          device_id: true,
+        },
+      )
+      .exec();
+    return Promise.resolve<DeviceEntity>(result);
+  }
+
+  async updateModel(entity: DeviceEntity): Promise<boolean> {
+    await this.deviceModel
+      .updateOne(
+        {
+          account_id: entity.account_id,
+          device_id: entity.device_id,
+        },
+        {
+          $set: {
+            fcm_token: entity.fcm_token,
+          },
+        },
+      )
+      .exec();
+    return Promise.resolve<boolean>(true);
+  }
 }

@@ -9,6 +9,19 @@ export class DevicesService {
   constructor(private _deviceRepository: DeviceRepository) {}
   async create(createDeviceDto: CreateDeviceDto): Promise<ApiResponse> {
     try {
+      const device = await this._deviceRepository.findOneDeviceByDeviceId(
+        createDeviceDto.account_id,
+        createDeviceDto.device_id,
+      );
+      if (device != null) {
+        device.fcm_token = createDeviceDto.fcm_token;
+        await this._deviceRepository.updateModel(device);
+        return Promise.resolve<ApiResponse>({
+          data: true,
+          message: 'update success',
+          code: HttpStatus.OK,
+        });
+      }
       const insertResult = await this._deviceRepository.insertOneDevice({
         account_id: createDeviceDto.account_id,
         fcm_token: createDeviceDto.fcm_token,
@@ -18,7 +31,7 @@ export class DevicesService {
       if (insertResult) {
         return Promise.resolve<ApiResponse>({
           data: true,
-          message: 'success',
+          message: 'insert success',
           code: HttpStatus.OK,
         });
       }
